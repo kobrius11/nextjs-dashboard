@@ -6,6 +6,7 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  TotalInvoices,
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -16,8 +17,8 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
@@ -216,3 +217,20 @@ export async function fetchFilteredCustomers(query: string) {
     throw new Error('Failed to fetch customer table.');
   }
 }
+
+export async function fetchTotalInvoices(status: string) {
+
+  try {
+    const data = await sql<TotalInvoices[]>`
+      SELECT
+        COUNT(id) as totalInvoices,
+        SUM(amount) as totalAmount
+      FROM invoices
+      WHERE status = ${status.toLowerCase()}}
+    `
+    return data;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch Invoices table.');
+  }
+};
