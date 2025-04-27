@@ -1,5 +1,7 @@
 import SideNav from "@/app/ui/dashboard/sidenav";
 
+// export const experimentas_ppr = true;
+
 interface LayoutProps {
     children: React.ReactNode
 };
